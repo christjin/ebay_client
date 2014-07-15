@@ -22,6 +22,12 @@ class EbayClient::Configuration
     @current_key = @api_keys.first
   end
 
+  def override options
+    options.each do |key, val|
+      instance_variable_set "@#{key}", val
+    end
+  end
+
   def next_key!
     i = @api_keys.index(@current_key) + 1
     i = 0 if i >= @api_keys.count

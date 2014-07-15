@@ -18,6 +18,10 @@ class EbayClient::Api < ActiveSupport::BasicObject
     create_methods if configuration.preload?
   end
 
+  def config options
+    @configuration.override options
+  end
+
   def dispatch name, body
     request = ::EbayClient::Request.new self, name, body
 

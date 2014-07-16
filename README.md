@@ -10,26 +10,30 @@ Installation
 
 `Gemfile`:
 
-    gem 'ebay_client', '~> 0.1.0'
+    gem 'ebay_client', git: 'git://github.com/christjin/ebay_client.git'
 
 `config/ebay_client.yml`:
 
-    development: &sandbox
+    development: &default
       api_keys:
-        - token: '<YOUR SANDBOX AUTHENTICATION TOKEN>'
-          devid: '<YOUR SANDBOX DEV ID>'
-          appid: '<YOUR SANDBOX APP ID>'
-          certid: '<YOUR SANDBOX CERT ID>'
+        - sandbox_devid: '<YOUR SANDBOX DEV ID>'
+          sandbox_appid: '<YOUR SANDBOX APP ID>'
+          sandbox_certid: '<YOUR SANDBOX CERT ID>'
+          live_devid: '<YOUR LIVE DEV ID>'
+          live_appid: '<YOUR LIVE APP ID>'
+          live_certid: '<YOUR LIVE CERT ID>'
 
     test:
-      <<: *sandbox
+      <<: *default
 
     production:
       api_keys:
-        - token: '<YOUR LIVE AUTHENTICATION TOKEN>'
-          devid: '<YOUR LIVE DEV ID>'
-          appid: '<YOUR LIVE APP ID>'
-          certid: '<YOUR LIVE CERT ID>'
+        - sandbox_devid: '<YOUR SANDBOX DEV ID>'
+          sandbox_appid: '<YOUR SANDBOX APP ID>'
+          sandbox_certid: '<YOUR SANDBOX CERT ID>'
+          live_devid: '<YOUR LIVE DEV ID>'
+          live_appid: '<YOUR LIVE APP ID>'
+          live_certid: '<YOUR LIVE CERT ID>'
 
 Fire up your console!
 
@@ -40,6 +44,7 @@ Usage
 
 e.g. `rails console`:
 
+    EbayClient.api.config(use_sandbox: true, token: '<token>', siteid: 0)
     EbayClient.api.get_ebay_official_time!
     # => {:timestamp=>Fri, 22 Nov 2013 12:31:02 +0000}
 

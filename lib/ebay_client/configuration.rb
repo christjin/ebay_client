@@ -1,6 +1,6 @@
 class EbayClient::Configuration
   class ApiKey
-    attr_accessor :appid, :devid, :certid, :token
+    attr_accessor :sandbox_appid, :sandbox_devid, :sandbox_certid, :live_appid, :live_devid, :live_certid
 
     def initialize key_values
       key_values.each do |key, val|
@@ -9,7 +9,7 @@ class EbayClient::Configuration
     end
   end
 
-  attr_accessor :version, :siteid, :routing, :use_sandbox, :live_url, :sandbox_url, :api_keys, :warning_level, :error_language, :current_key, :savon_log_level
+  attr_accessor :version, :siteid, :routing, :use_sandbox, :live_url, :sandbox_url, :api_keys, :warning_level, :error_language, :current_key, :savon_log_level, :token
 
   def initialize presets
     presets.each do |key, val|
@@ -35,19 +35,15 @@ class EbayClient::Configuration
   end
 
   def appid
-    @current_key.appid
+    use_sandbox ? @current_key.sandbox_appid : @current_key.live_appid
   end
 
   def devid
-    @current_key.devid
+    use_sandbox ? @current_key.sandbox_devid : @current_key.live_appid
   end
 
   def certid
-    @current_key.certid
-  end
-
-  def token
-    @current_key.token
+    use_sandbox ? @current_key.sandbox_certid : @current_key.live_appid
   end
 
   def url

@@ -6,7 +6,7 @@ class EbayClient::Endpoint
   end
 
   def url_for action
-    url_base + action.to_s
+    url_base + action.to_s.gsub(/!/, '')
   end
 
   def url_base

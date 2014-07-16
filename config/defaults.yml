@@ -9,10 +9,11 @@ defaults: &defaults
   error_language: en_US
   api_keys: []
   savon_log_level: debug
+  sandbox_url: 'https://api.sandbox.ebay.com/wsapi'
+  live_url: 'https://api.ebay.com/wsapi'
 
 development: &development
   <<: *defaults
-  url: 'https://api.sandbox.ebay.com/wsapi'
   warning_level: High
   savon_log_level: info
 
@@ -21,5 +22,4 @@ test:
 
 production:
   <<: *defaults
-  url: 'https://api.ebay.com/wsapi'
   preload: true

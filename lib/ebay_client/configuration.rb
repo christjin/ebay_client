@@ -9,7 +9,7 @@ class EbayClient::Configuration
     end
   end
 
-  attr_accessor :version, :siteid, :routing, :url, :api_keys, :warning_level, :error_language, :current_key, :savon_log_level
+  attr_accessor :version, :siteid, :routing, :use_sandbox, :live_url, :sandbox_url, :api_keys, :warning_level, :error_language, :current_key, :savon_log_level
 
   def initialize presets
     presets.each do |key, val|
@@ -48,6 +48,10 @@ class EbayClient::Configuration
 
   def token
     @current_key.token
+  end
+
+  def url
+    use_sandbox ? sandbox_url : live_url
   end
 
   def wsdl_file

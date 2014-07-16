@@ -6,7 +6,7 @@ class EbayClient::Request
   end
 
   def normalized_name
-    @normalized_name ||= @name.to_s.camelcase.gsub(/ebay/i, 'eBay')
+    @normalized_name ||= @name.to_s.camelcase.gsub(/ebay/i, 'eBay').gsub(/!/, '')
   end
 
   def normalized_body

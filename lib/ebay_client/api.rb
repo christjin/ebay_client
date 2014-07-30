@@ -28,7 +28,7 @@ class EbayClient::Api < ActiveSupport::BasicObject
     @calls += 1
     begin
       response = request.execute
-      block.call(request, response)
+      block.call(request, response) if block
       response
       # rescue ::EbayClient::Response::Error.for_code('218050') => e
       #   @configuration.next_key!

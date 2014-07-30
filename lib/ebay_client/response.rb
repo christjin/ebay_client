@@ -24,9 +24,9 @@ class EbayClient::Response
 
     def to_s
       <<-END
-        #{short_message} - #{code}
+#{short_message} - #{code}
 
-        #{long_message}
+      #{long_message}
       END
     end
 
@@ -61,9 +61,11 @@ class EbayClient::Response
     end
   end
 
-  attr_reader :timestamp, :ack, :build, :version, :errors, :payload, :correlation_id
+  attr_reader :timestamp, :ack, :build, :version, :errors, :payload, :correlation_id, :xml
 
-  def initialize values
+  def initialize response
+    @xml = response.to_xml
+    values = response.body.values.first
     @ack = values.delete :ack
     @build = values.delete :build
     @version = values.delete :version

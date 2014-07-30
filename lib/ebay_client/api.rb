@@ -22,20 +22,22 @@ class EbayClient::Api < ActiveSupport::BasicObject
     @configuration.override options
   end
 
-  def dispatch name, body
+  def dispatch name, body, &block
     request = ::EbayClient::Request.new self, name, body
 
     @calls += 1
     begin
-      request.execute
-    rescue ::EbayClient::Response::Error.for_code('218050') => e
-      @configuration.next_key!
-      request.execute
+      response = request.execute
+      block.call(request, response)
+      response
+      # rescue ::EbayClient::Response::Error.for_code('218050') => e
+      #   @configuration.next_key!
+      #   request.execute
     end
   end
 
-  def dispatch! name, body
-    dispatch(name, body).payload!
+  def dispatch! name, body, &block
+    dispatch(name, body, &block).payload!
   end
 
   def inspect
@@ -50,12 +52,12 @@ class EbayClient::Api < ActiveSupport::BasicObject
     client.wsdl.soap_actions.each do |action|
       name = action.to_s.gsub(/e_bay_/, '_ebay_')
 
-      api_methods.send :define_method, name do |*args|
-        dispatch name, args.first
+      api_methods.send :define_method, name do |*args, &block|
+        dispatch name, args.first, &block
       end
 
-      api_methods.send :define_method, name + '!' do |*args|
-        dispatch! name, args.first
+      api_methods.send :define_method, name + '!' do |*args, &block|
+        dispatch! name, args.first, &block
       end
     end
 
@@ -64,9 +66,10 @@ class EbayClient::Api < ActiveSupport::BasicObject
 
   def method_missing name, *args, &block
     if name.to_s[-1,1] == '!'
-      dispatch! name, args.first
+      dispatch! name, args.first, &block
     else
-      dispatch name, args.first
+      dispatch name, args.first, &block
     end
   end
 end
+

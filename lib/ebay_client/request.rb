@@ -1,8 +1,11 @@
 class EbayClient::Request
+  attr_reader :xml
+
   def initialize api, name, body
     @api = api
     @name = name
     @body = body || {}
+    @xml = nil
   end
 
   def normalized_name
@@ -14,15 +17,15 @@ class EbayClient::Request
   end
 
   def execute
-    read_response execute_request.body
+    read_response execute_request
   end
 
   protected
   def body_defaults
     {
-      :Version => @api.configuration.version,
-      :WarningLevel => @api.configuration.warning_level,
-      :ErrorLanguage => @api.configuration.error_language
+        :Version => @api.configuration.version,
+        :WarningLevel => @api.configuration.warning_level,
+        :ErrorLanguage => @api.configuration.error_language
     }
   end
 
@@ -31,10 +34,11 @@ class EbayClient::Request
       soap.endpoint = @api.endpoint.url_for normalized_name
       soap.header = @api.header.to_hash
       soap.body = normalized_body
+      @xml = soap.to_xml
     end
   end
 
-  def read_response response_body
-    EbayClient::Response.new response_body.values.first
+  def read_response response
+    EbayClient::Response.new response
   end
 end
